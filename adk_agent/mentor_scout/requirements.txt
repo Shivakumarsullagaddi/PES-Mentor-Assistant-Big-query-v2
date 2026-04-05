@@ -3,3 +3,4 @@ pandas
 db-dtypes
 python-dotenv
 tavily-python
+google-adk==1.28.1
