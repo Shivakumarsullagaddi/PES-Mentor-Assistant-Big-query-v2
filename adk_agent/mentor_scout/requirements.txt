@@ -1,5 +1,5 @@
-google-adk
 google-cloud-bigquery
 pandas
+db-dtypes
 python-dotenv
 tavily-python

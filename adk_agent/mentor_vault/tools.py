@@ -17,7 +17,7 @@ TABLE = os.getenv("TABLE_ID")
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL")
 
 try:
-    client = bigquery.Client(project=PROJECT_ID)
+    client = bigquery.Client(project=PROJECT_ID, location="US")
 except Exception as e:
     print(f"[ERROR] Failed to initialize BigQuery: {e}")
 

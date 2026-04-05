@@ -1,2 +1,5 @@
-db-dtypes
+google-cloud-bigquery
 pandas
+db-dtypes
+python-dotenv
+tavily-python

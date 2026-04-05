@@ -19,7 +19,7 @@ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
 try:
-    client = bigquery.Client(project=PROJECT_ID)
+    client = bigquery.Client(project=PROJECT_ID,location="US")
 except Exception as e:
     print(f"[ERROR] Failed to initialize BigQuery: {e}")
 
