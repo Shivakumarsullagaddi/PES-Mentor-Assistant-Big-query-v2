@@ -3,6 +3,8 @@
 ## Aim of the Project
 The goal of this project is to build a highly interactive, intelligent, and visually appealing AI Mentor Recommendation Web Platform for PES University students. It guides students to their perfect faculty mentors for capstones, research projects, and academic guidance by combining internal university databases with real-time web intelligence.
 
+pes_mentor_flowChat.png
+
 ## What We Have Done
 We successfully designed and deployed a multi-agent system using the **Google Agent Development Kit (ADK)**, hosted serverlessly on Google Cloud Run. The platform features two specialized intelligent agents:
 1. **Mentor Vault**: A highly accurate internal database agent that instantly retrieves specific professor details, filters by campus, and performs advanced semantic profile matching using Vector Embeddings.
