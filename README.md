@@ -3,7 +3,8 @@
 ## Aim of the Project
 The goal of this project is to build a highly interactive, intelligent, and visually appealing AI Mentor Recommendation Web Platform for PES University students. It guides students to their perfect faculty mentors for capstones, research projects, and academic guidance by combining internal university databases with real-time web intelligence.
 
-pes_mentor_flowChat.png
+<img width="1464" height="622" alt="image" src="https://github.com/user-attachments/assets/34111909-71a4-42b8-a8ef-22f2d0cb002e" />
+
 
 ## What We Have Done
 We successfully designed and deployed a multi-agent system using the **Google Agent Development Kit (ADK)**, hosted serverlessly on Google Cloud Run. The platform features two specialized intelligent agents:
