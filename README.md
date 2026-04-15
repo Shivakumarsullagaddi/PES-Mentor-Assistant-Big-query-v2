@@ -5,6 +5,10 @@ The goal of this project is to build a highly interactive, intelligent, and visu
 
 <img width="1464" height="622" alt="image" src="https://github.com/user-attachments/assets/34111909-71a4-42b8-a8ef-22f2d0cb002e" />
 
+## 🔗 Live Deployment
+
+Access the application here:  
+👉 https://mentor-scout-482781773486.us-central1.run.app/
 
 ## What We Have Done
 We successfully designed and deployed a multi-agent system using the **Google Agent Development Kit (ADK)**, hosted serverlessly on Google Cloud Run. The platform features two specialized intelligent agents:
