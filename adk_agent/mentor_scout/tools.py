@@ -44,10 +44,10 @@ def _get_all_names() -> list[str]:
 # ==========================================
 # 1. UPGRADED: Wildcard & Multi-parameter Filters
 # ==========================================
-def mentor_exact_filter(campus: Optional[str] = None, department: Optional[str] = None) -> str:
-    """Lists professors filtered by 'campus', 'department', or BOTH at the same time."""
+def mentor_exact_filter(campus: Optional[str] = None, department: Optional[str] = None, name: Optional[str] = None) -> str:
+    """Lists professors filtered by 'campus', 'department', 'name', or any combination. Use this for listing or wildcard name searches."""
     print(f"\n[DEBUG] === TOOL: mentor_exact_filter ===")
-    print(f"[DEBUG] Filters Requested -> Campus: {campus} | Department: {department}")
+    print(f"[DEBUG] Filters -> Campus: {campus} | Department: {department} | Name: {name}")
 
     conditions = []
     params = []
@@ -58,12 +58,15 @@ def mentor_exact_filter(campus: Optional[str] = None, department: Optional[str] 
     if department:
         conditions.append("LOWER(department) LIKE @dept_val")
         params.append(bigquery.ScalarQueryParameter("dept_val", "STRING", f"%{department.lower().strip()}%"))
+    if name:
+        conditions.append("LOWER(name) LIKE @name_val")
+        params.append(bigquery.ScalarQueryParameter("name_val", "STRING", f"%{name.lower().strip()}%"))
 
     if not conditions:
-        return "Error: You must provide at least one filter (campus or department)."
+        return "Error: You must provide at least one filter (campus, department, or name)."
 
     where_clause = " AND ".join(conditions)
-    sql = f"SELECT name, department, campus, image FROM `{PROJECT_ID}.{DATASET}.{TABLE}` WHERE {where_clause}"
+    sql = f"SELECT name, department, campus, designation, image FROM `{PROJECT_ID}.{DATASET}.{TABLE}` WHERE {where_clause}"
     print(f"[DEBUG] SQL Executing: {sql}")
 
     try:
@@ -75,6 +78,7 @@ def mentor_exact_filter(campus: Optional[str] = None, department: Optional[str] 
         print(f"[ERROR] EXCEPTION in Exact Filter:")
         traceback.print_exc()
         return f"Database error: {e}"
+
 
 
 # ==========================================
