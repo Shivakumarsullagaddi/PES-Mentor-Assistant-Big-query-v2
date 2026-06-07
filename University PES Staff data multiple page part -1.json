@@ -1,0 +1,417 @@
+{
+  "name": "University PES Staff data multiple page part -1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -144
+      ],
+      "id": "36812b99-c03d-4e3b-b77e-3059d8a386e1",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "=https://staff.pes.edu/atoz/?page={{$json.pages}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        672,
+        0
+      ],
+      "id": "51021300-5d92-4a81-b6d4-337fc1962649",
+      "name": "Get Staff Page",
+      "alwaysOutputData": false,
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "profile_links",
+              "cssSelector": "a[href^=\"/nm\"]",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        0
+      ],
+      "id": "4ccff8ea-db9d-44f0-a213-0a4fd687ba97",
+      "name": "Extract Staff Links"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "profile_links",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "91b5c8d6-f653-4f43-8215-10e62510e379",
+      "name": "Split Professor Links"
+    },
+    {
+      "parameters": {
+        "url": "=https://staff.pes.edu{{$json.profile_links}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1568,
+        0
+      ],
+      "id": "1a3e223c-e746-42fc-a720-564d669f7391",
+      "name": "Get Professor Page"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "name",
+              "cssSelector": ".agent_card-title h4"
+            },
+            {
+              "key": "designation",
+              "cssSelector": ".list-single-stats li span"
+            },
+            {
+              "key": "research",
+              "cssSelector": "#tab-research .ul-item-left li p",
+              "returnArray": true
+            },
+            {
+              "key": "teaching",
+              "cssSelector": "#tab-teaching .list-single-main-item_content li p",
+              "returnArray": true
+            },
+            {
+              "key": "about",
+              "cssSelector": ".list-single-main-item.bottom-border-0 p"
+            },
+            {
+              "key": "publications_journals",
+              "cssSelector": "#tab-publications .list-single-main-item_content:last-of-type li p",
+              "returnArray": true
+            },
+            {
+              "key": "publications_conferences",
+              "cssSelector": "#tab-publications .list-single-main-item_content:has(h3:contains(\"Conferences\")) li p",
+              "returnArray": true
+            },
+            {
+              "key": "education",
+              "cssSelector": "#tab-bio > div:nth-child(1) .bookings-item li p",
+              "returnArray": true
+            },
+            {
+              "key": "mail",
+              "cssSelector": "a[href^=\"mailto\"]"
+            },
+            {
+              "key": "phone",
+              "cssSelector": "a[href^=\"tel\"]"
+            },
+            {
+              "key": "responsibilities",
+              "cssSelector": "#tab-responsibilities .list-single-main-item_content li p",
+              "returnArray": true
+            },
+            {
+              "key": "image",
+              "cssSelector": "#full-image",
+              "returnValue": "attribute",
+              "attribute": "data-bg"
+            },
+            {
+              "key": "department",
+              "cssSelector": "ul.no-list-style li:nth-child(3) p"
+            },
+            {
+              "key": "campus",
+              "cssSelector": "ul.no-list-style li:nth-child(4) p"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1792,
+        0
+      ],
+      "id": "bbcccae6-eb32-407f-91c9-a3f002f23195",
+      "name": "Extract Professor Data"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        0
+      ],
+      "id": "a2cbdc85-30b2-4802-9fa9-23bd2cd8a644",
+      "name": "Remove Duplicates"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "19qb2aQdVzDKpqP3kgn19cfyLGJEISkprq7gEIPdTOQ8",
+          "mode": "list",
+          "cachedResultName": "University Research Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19qb2aQdVzDKpqP3kgn19cfyLGJEISkprq7gEIPdTOQ8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19qb2aQdVzDKpqP3kgn19cfyLGJEISkprq7gEIPdTOQ8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2240,
+        0
+      ],
+      "id": "08399a8a-4f6f-4581-a419-7505a79d3d95",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "MkDlgsGV4h2K8aMU",
+          "name": "trial85555 - google sheet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n\n  // Universal NA handler\n  const getValue = (val) => {\n    if (val === undefined || val === null) return \"N/A\";\n    if (typeof val === \"string\" && val.trim() === \"\") return \"N/A\";\n    return val;\n  };\n\n  // Clean text (remove \\n)\n  const cleanText = (val) => {\n    val = getValue(val);\n    if (val === \"N/A\") return val;\n    return val.replace(/(\\r\\n|\\n|\\r)/g, \" \").trim();\n  };\n\n  // Format list safely\n  const formatNumbered = (val) => {\n    if (!val) return \"N/A\";\n\n    let arr = [];\n\n    if (Array.isArray(val)) {\n      arr = val.flat(Infinity);\n    } else if (typeof val === \"object\") {\n      arr = Object.values(val);\n    } else {\n      return getValue(val);\n    }\n\n    if (!arr.length) return \"N/A\";\n\n    return arr\n      .map((v, i) => {\n        if (typeof v === \"object\" && v !== null) {\n          v = Object.values(v).join(\" \");\n        }\n        v = getValue(v);\n        return v === \"N/A\" ? null : `${i + 1}. ${v}`;\n      })\n      .filter(v => v !== null)\n      .join(\"\\n\") || \"N/A\";\n  };\n\n  const baseUrl = \"https://staff.pes.edu\";\n\n  // Image fix\n  let imageUrl = \"N/A\";\n  if (item.json.image) {\n    imageUrl = item.json.image.startsWith(\"http\")\n      ? item.json.image\n      : baseUrl + item.json.image;\n  }\n\n  return {\n    json: {\n      name: getValue(item.json.name),\n      designation: getValue(item.json.designation),\n\n      department: getValue(item.json.department),\n      campus: cleanText(item.json.campus),\n\n      research: formatNumbered(item.json.research),\n      teaching: formatNumbered(item.json.teaching),\n\n      about: getValue(item.json.about),\n\n      publications_journals: formatNumbered(item.json.publications_journals),\n      publications_conferences: formatNumbered(item.json.publications_conferences),\n\n      education: formatNumbered(item.json.education),\n\n      mail: getValue(item.json.mail || item.json.Mail),\n      phone: getValue(item.json.phone || item.json.Phone),\n\n      responsibilities: formatNumbered(item.json.responsibilities),\n\n      image: imageUrl\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        0
+      ],
+      "id": "1a570da4-37cb-416b-a695-03b41caee6d6",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = [];\nfor (let i = 1; i <= 24; i++) {\n  items.push({ json: { pages: i } });\n}\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        -128
+      ],
+      "id": "d4ee9811-08fb-4529-bae5-78d0181c288a",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        432,
+        -80
+      ],
+      "id": "46ff2f28-4d85-4ce4-ad4c-882a19636c98",
+      "name": "Loop Over Items"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Staff Page": {
+      "main": [
+        [
+          {
+            "node": "Extract Staff Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Staff Links": {
+      "main": [
+        [
+          {
+            "node": "Split Professor Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Professor Links": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Professor Page": {
+      "main": [
+        [
+          {
+            "node": "Extract Professor Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Get Professor Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Professor Data": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get Staff Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "40dd022f-6929-46f9-a2be-518dd837dfd8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "867941c689262bc323a20e724ca9823bf022d0a81473ea0abe774efcccc677e9"
+  },
+  "id": "nbjQYXOhjBaPl83h",
+  "tags": []
+}
